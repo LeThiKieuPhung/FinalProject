@@ -22,6 +22,7 @@
         <activity android:name=".StartSentence"/>
         <activity android:name=".ViewAskAnwser"/>
         <activity android:name=".ViewSentence"/>
+        <activity android:name=".Setting"/>
     </application>
 
 </manifest>

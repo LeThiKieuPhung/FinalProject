@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--Thêm view để load quảng cáo
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btn_setting"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_id" />
-        -->
+        android:src="@drawable/ic_setting"
+        android:layout_gravity="right"
+        android:background="@color/colorBlue"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -47,5 +46,14 @@
         android:textSize="20sp"
         android:textColor="@color/colorBlue"
         android:background="@drawable/button"/>
+
+    <!--Thêm view để load quảng cáo
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_id" />
+        -->
 
 </LinearLayout>
