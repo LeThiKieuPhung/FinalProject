@@ -16,12 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AskAnwser"/>
-        <activity android:name=".Sentence"/>
-        <activity android:name=".StartAskAnwser"/>
-        <activity android:name=".StartSentence"/>
-        <activity android:name=".ViewAskAnwser"/>
-        <activity android:name=".ViewSentence"/>
+        <activity android:name=".AskAnwser"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Sentence"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Start"/>
+        <activity android:name=".ViewLesson"/>
         <activity android:name=".Setting"/>
     </application>
 

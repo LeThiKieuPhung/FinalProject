@@ -16,11 +16,12 @@
         android:text="Level" />
 
     <RadioGroup
+        android:id="@+id/radioGroupLevel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/radioLevel1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +30,7 @@
             android:text="Easy" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/radioLevel2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,7 +39,7 @@
             android:text="Normal" />
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/radioLevel3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
