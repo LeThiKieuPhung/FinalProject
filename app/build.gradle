@@ -21,6 +21,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/LICENSE'
+        pickFirst 'META-INF/io.netty.versions.properties'
+
+    }
 }
 
 dependencies {
@@ -35,5 +41,12 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'com.github.tony19:logback-android:1.1.1-11'
+    compile 'com.android.volley:volley:1.0.0'
+    // https://mvnrepository.com/artifact/io.vertx/vertx-core
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
+    implementation 'com.ibm.watson.developer_cloud:conversation:4.2.1'
+    implementation 'com.ibm.watson.developer_cloud:text-to-speech:4.2.1'
+    implementation 'com.ibm.watson.developer_cloud:speech-to-text:4.2.1'
+    implementation 'com.ibm.watson.developer_cloud:android-sdk:0.4.3'
 
 }
