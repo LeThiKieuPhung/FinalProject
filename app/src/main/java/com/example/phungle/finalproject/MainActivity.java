@@ -14,10 +14,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.phungle.finalproject.model.QuesAndAnswer;
+import com.example.phungle.finalproject.model.Topic;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,9 +56,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSomeData() {
-        GlobalData.listQuesAndAnswer.add(new QuesAndAnswer("How are you ?","I fine"));
-        GlobalData.listQuesAndAnswer.add(new QuesAndAnswer("GoodMorning","GoodMorning"));
-        GlobalData.listQuesAndAnswer.add(new QuesAndAnswer("How old are you ?","I 15 year old"));
-        GlobalData.listQuesAndAnswer.add(new QuesAndAnswer("Would you like some tea ?","Yes I do"));
+
+
+        List<QuesAndAnswer> list = new ArrayList<>();
+        list.add(new QuesAndAnswer("How are you ?","I'm fine"));
+        list.add(new QuesAndAnswer("Good Morning","Good Morning"));
+        GlobalData.listTopic.add(new Topic("Topic 1",list));
+
+        List<QuesAndAnswer> list2 = new ArrayList<>();
+        list2.add(new QuesAndAnswer("How old are you ?","I 15 year old"));
+        list2.add(new QuesAndAnswer("Would you like some tea ?","Yes I do"));
+        GlobalData.listTopic.add(new Topic("Topic 2",list2));
     }
 }

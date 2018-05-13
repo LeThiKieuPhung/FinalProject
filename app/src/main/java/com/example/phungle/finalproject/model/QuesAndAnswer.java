@@ -1,7 +1,6 @@
 package com.example.phungle.finalproject.model;
 
 public class QuesAndAnswer {
-
     public String Quesion;
     public String Answer;
 

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallback;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,6 +41,7 @@ public class Start extends AppCompatActivity {
     RingProgressBar progressBar;
     TextView textTime;
     ImageButton imageButton;
+    RatingBar ratingBar;
 
     TextView txtQues;
     TextView txtAnswer;
@@ -63,6 +67,8 @@ public class Start extends AppCompatActivity {
         progressBar = (RingProgressBar) findViewById(R.id.processBarTime);
         textTime = (TextView) findViewById(R.id.textTime);
         imageButton = (ImageButton) findViewById(R.id.imageButton);
+        ratingBar = findViewById(R.id.ratingBar);
+
         txtQues = findViewById(R.id.txtQues);
         txtAnswer = findViewById(R.id.txtAnswer);
 
@@ -73,15 +79,53 @@ public class Start extends AppCompatActivity {
         timeCountdown = GlobalData.getTime();
         textTime.setText(String.valueOf(timeCountdown));
         quesNumber = new AtomicInteger(0);
+
         mixQuestion();
 
 
-        txtQues.setText(GlobalData.listQuesAndAnswer.get(quesNumber.getAndIncrement()).Quesion);
+        txtQues.setText(GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.getAndIncrement()).Quesion);
         txtAnswer.setText("");
         imageButton.setOnClickListener(view -> {
             record();
         });
 
+    }
+
+    public void calculateResult(){
+        String defaultAnswer = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.get() - 1).Answer;
+        String userAnswer = txtAnswer.getText().toString();
+
+
+        if (StringUtils.isEmpty(userAnswer)){
+            Toast.makeText(this,"You don't speak anything",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        defaultAnswer = defaultAnswer.toLowerCase();
+        userAnswer = userAnswer.toLowerCase();
+        String[] listWordInUserAnswer = userAnswer.split(" ");
+        int numberWordInDefaultAnswer = defaultAnswer.split(" ").length;
+        int countNumberWordMatch = 0;
+        
+        if (defaultAnswer.equals(userAnswer)){
+            Toast.makeText(this,"Excellent",Toast.LENGTH_SHORT).show();
+            ratingBar.setNumStars(5);
+        }
+        else {
+            for (String word: listWordInUserAnswer) {
+                if (defaultAnswer.contains(word)){
+                    countNumberWordMatch++;
+                }
+            }
+            if (countNumberWordMatch > numberWordInDefaultAnswer){
+                Toast.makeText(this,"Good",Toast.LENGTH_SHORT).show();
+                ratingBar.setNumStars(4);
+            }
+            else{
+                float numberWordMatchPerStar = (float)numberWordInDefaultAnswer / 5;
+                ratingBar.setRating((float) countNumberWordMatch / numberWordMatchPerStar);
+            }
+        }
     }
 
     public void startCountDown(){
@@ -130,13 +174,13 @@ public class Start extends AppCompatActivity {
 
     public void mixQuestion(){
         Random random = new Random();
-        int listSize = GlobalData.listQuesAndAnswer.size();
+        int listSize = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.size();
         int randomIndex = random.nextInt(listSize);
 
         for (int i = 0 ; i < listSize ; i++){
-            QuesAndAnswer quesAndAnswer = GlobalData.listQuesAndAnswer.get(randomIndex);
-            GlobalData.listQuesAndAnswer.remove(quesAndAnswer);
-            GlobalData.listQuesAndAnswer.add(0, quesAndAnswer);
+            QuesAndAnswer quesAndAnswer = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(randomIndex);
+            GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.remove(quesAndAnswer);
+            GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.add(0, quesAndAnswer);
             randomIndex = random.nextInt(listSize);
         }
     }
@@ -168,6 +212,9 @@ public class Start extends AppCompatActivity {
                 .build();
     }
 
+
+
+
     @SuppressLint("HandlerLeak")
     Handler myHandler = new Handler()
     {
@@ -185,22 +232,27 @@ public class Start extends AppCompatActivity {
                     super.handleMessage(msg);
                 }
                 else if (progress == 100){
-                    try {
-                        Thread.sleep(10); // delay to show star or something
-                        // or do something bla bla bla
+                    calculateResult();
 
+                    final Handler handler = new Handler();
+                    handler.postDelayed(() -> {
+                        if (quesNumber.get() == GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.size()){
+                            Toast.makeText(Start.this,"The test is over",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        ratingBar.setNumStars(0);
+                        ratingBar.setRating(0);
                         progress = 0;
                         if (microphoneHelper != null)
                             microphoneHelper.closeInputStream();
                         timeCountdown = GlobalData.getTime();
                         record();
-
-                        txtQues.setText(GlobalData.listQuesAndAnswer.get(quesNumber.getAndIncrement()).Quesion);
+                        txtQues.setText(GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.getAndIncrement()).Quesion);
                         txtAnswer.setText("");
-                        super.handleMessage(msg);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    }, 3000);
+
+
+                    super.handleMessage(msg);
 
                 }
         }
@@ -211,7 +263,11 @@ public class Start extends AppCompatActivity {
         public void onTranscription(SpeechResults speechResults) {
             if(speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
                 String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
-                runOnUiThread(() -> txtAnswer.setText(text));
+
+                if (!text.equals("%hesitation") && !text.equals("%HESITATION")) {
+                    String newText = text;
+                    runOnUiThread(() -> txtAnswer.setText(newText));
+                }
             }
         }
 

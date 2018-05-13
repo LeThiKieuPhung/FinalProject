@@ -55,13 +55,13 @@ public class ViewLesson extends AppCompatActivity {
                 reader = new BufferedReader(new InputStreamReader(in));
                 String line;
 
-                while ((line = reader.readLine()) != null){
-                    String [] buffer = line.split("|");
-                    if (buffer.length == 2)
-                    {
-                        GlobalData.listQuesAndAnswer.add(new QuesAndAnswer(buffer[0],buffer[1]));
-                    }
-                }
+//                while ((line = reader.readLine()) != null){
+//                    String [] buffer = line.split("|");
+//                    if (buffer.length == 2)
+//                    {
+//                        GlobalData.listQuesAndAnswer.add(new QuesAndAnswer(buffer[0],buffer[1]));
+//                    }
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

@@ -1,13 +1,14 @@
 package com.example.phungle.finalproject;
 
-import com.example.phungle.finalproject.model.QuesAndAnswer;
+import com.example.phungle.finalproject.model.Topic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalData {
 
-    public static final List<QuesAndAnswer> listQuesAndAnswer = new ArrayList<>();
+    public static List<Topic> listTopic = new ArrayList<>();
+    public static int topicChoise = 0;
     public static int Level = 1;
     public static int time = 12 - 3;
 
