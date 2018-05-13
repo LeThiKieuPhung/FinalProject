@@ -28,7 +28,7 @@ public class Sentence extends AppCompatActivity {
             startActivity(intent);
         });
         btn_view.setOnClickListener(view -> {
-            Intent intent = new Intent(Sentence.this, ViewLesson.class);
+            Intent intent = new Intent(Sentence.this, ViewSentence.class);
             startActivity(intent);
         });
         btn_setting.setOnClickListener(view -> {

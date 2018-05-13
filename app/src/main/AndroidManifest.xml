@@ -26,11 +26,21 @@
         </activity>
         <activity android:name=".AskAnwser"
             android:parentActivityName=".MainActivity"/>
+
         <activity android:name=".Sentence"
             android:parentActivityName=".MainActivity"/>
+
         <activity android:name=".Start"/>
         <activity android:name=".ViewLesson"/>
         <activity android:name=".Setting"/>
+        <activity android:name=".AddSentence"
+            android:parentActivityName=".ViewSentence"/>
+
+        <activity android:name=".AddAskAnwser"
+            android:parentActivityName=".ViewAskAnwser"/>
+
+        <activity android:name=".ViewSentence"/>
+        <activity android:name=".ViewAskAnwser"/>
     </application>
 
 </manifest>

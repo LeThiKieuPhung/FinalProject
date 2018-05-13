@@ -27,7 +27,7 @@ public class AskAnwser extends AppCompatActivity{
             startActivity(intent);
         });
         btn_view.setOnClickListener(view -> {
-            Intent intent = new Intent(AskAnwser.this, ViewLesson.class);
+            Intent intent = new Intent(AskAnwser.this, ViewAskAnwser.class);
             startActivity(intent);
         });
         btn_setting.setOnClickListener(view -> {
