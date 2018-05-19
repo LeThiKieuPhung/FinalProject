@@ -25,6 +25,7 @@ public class Sentence extends AppCompatActivity {
 
         btn_start.setOnClickListener(view -> {
             Intent intent = new Intent(Sentence.this, Start.class);
+            intent.putExtra(Intent.EXTRA_TEXT, "Sentence");
             startActivity(intent);
         });
         btn_view.setOnClickListener(view -> {

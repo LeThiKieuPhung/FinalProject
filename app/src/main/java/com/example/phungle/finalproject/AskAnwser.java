@@ -24,10 +24,12 @@ public class AskAnwser extends AppCompatActivity{
 
         btn_start.setOnClickListener(view -> {
             Intent intent = new Intent(AskAnwser.this, Start.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
         btn_view.setOnClickListener(view -> {
             Intent intent = new Intent(AskAnwser.this, ViewAskAnwser.class);
+            intent.putExtra(Intent.EXTRA_TEXT, "AskAnwser");
             startActivity(intent);
         });
         btn_setting.setOnClickListener(view -> {

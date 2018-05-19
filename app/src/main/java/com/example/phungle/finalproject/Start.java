@@ -1,6 +1,7 @@
 package com.example.phungle.finalproject;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,10 @@ import static com.example.phungle.finalproject.Const.RECORD_REQUEST_CODE;
 import static com.example.phungle.finalproject.Const.REQUEST_RECORD_AUDIO_PERMISSION;
 
 public class Start extends AppCompatActivity {
+
+
+    public String SENTENCE = "Sentence";
+    public String ASKANWSER = "AskAnwser";
     String STT_username;
     String STT_password;
 
@@ -56,7 +61,7 @@ public class Start extends AppCompatActivity {
     boolean permissionToRecordAccepted = false;
 
     int timeCountdown;
-
+    String Type;
 
 
     @Override
@@ -72,6 +77,9 @@ public class Start extends AppCompatActivity {
         txtQues = findViewById(R.id.txtQues);
         txtAnswer = findViewById(R.id.txtAnswer);
 
+        Intent intent = getIntent();
+        Type = intent.getStringExtra(Intent.EXTRA_TEXT);
+
         microphoneHelper = new MicrophoneHelper(this);
         STT_username = getBaseContext().getString(R.string.STT_username);
         STT_password = getBaseContext().getString(R.string.STT_password);
@@ -83,7 +91,11 @@ public class Start extends AppCompatActivity {
         mixQuestion();
 
 
-        txtQues.setText(GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.getAndIncrement()).Quesion);
+        if (Type.equals(ASKANWSER)) {
+            txtQues.setText(GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.getAndIncrement()).Quesion);
+        } else if (Type.equals(SENTENCE)) {
+            txtQues.setText(GlobalData.listTopicSent.get(GlobalData.topicSentChoise).listWord.get(quesNumber.getAndIncrement()));
+        }
         txtAnswer.setText("");
         imageButton.setOnClickListener(view -> {
             record();
@@ -91,13 +103,22 @@ public class Start extends AppCompatActivity {
 
     }
 
-    public void calculateResult(){
-        String defaultAnswer = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.get() - 1).Answer;
+    public void calculateResult() {
+
+        String defaultAnswer = "";
+
+        if (Type.equals(ASKANWSER)) {
+            defaultAnswer =  GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.get() - 1).Answer;
+        } else if (Type.equals(SENTENCE)) {
+            defaultAnswer =  GlobalData.listTopicSent
+                    .get(GlobalData.topicSentChoise).listWord.get(quesNumber.get() - 1);
+        }
+
         String userAnswer = txtAnswer.getText().toString();
 
 
-        if (StringUtils.isEmpty(userAnswer)){
-            Toast.makeText(this,"You don't speak anything",Toast.LENGTH_SHORT).show();
+        if (StringUtils.isEmpty(userAnswer)) {
+            Toast.makeText(this, "You don't speak anything", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -106,32 +127,30 @@ public class Start extends AppCompatActivity {
         String[] listWordInUserAnswer = userAnswer.split(" ");
         int numberWordInDefaultAnswer = defaultAnswer.split(" ").length;
         int countNumberWordMatch = 0;
-        
-        if (defaultAnswer.equals(userAnswer)){
-            Toast.makeText(this,"Excellent",Toast.LENGTH_SHORT).show();
+
+        if (defaultAnswer.equals(userAnswer)) {
+            Toast.makeText(this, "Excellent", Toast.LENGTH_SHORT).show();
             ratingBar.setNumStars(5);
-        }
-        else {
-            for (String word: listWordInUserAnswer) {
-                if (defaultAnswer.contains(word)){
+        } else {
+            for (String word : listWordInUserAnswer) {
+                if (defaultAnswer.contains(word)) {
                     countNumberWordMatch++;
                 }
             }
-            if (countNumberWordMatch > numberWordInDefaultAnswer){
-                Toast.makeText(this,"Good",Toast.LENGTH_SHORT).show();
+            if (countNumberWordMatch > numberWordInDefaultAnswer) {
+                Toast.makeText(this, "Good", Toast.LENGTH_SHORT).show();
                 ratingBar.setNumStars(4);
-            }
-            else{
-                float numberWordMatchPerStar = (float)numberWordInDefaultAnswer / 5;
+            } else {
+                float numberWordMatchPerStar = (float) numberWordInDefaultAnswer / 5;
                 ratingBar.setRating((float) countNumberWordMatch / numberWordMatchPerStar);
             }
         }
     }
 
-    public void startCountDown(){
+    public void startCountDown() {
         long delay = GlobalData.getTime() * 10;
         new Thread(() -> {
-            for (int i = 0 ; i <= 100 ; i++){
+            for (int i = 0; i <= 100; i++) {
                 try {
                     Thread.sleep(delay);
                     myHandler.sendEmptyMessage(0);
@@ -145,9 +164,9 @@ public class Start extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 break;
             case RECORD_REQUEST_CODE: {
 
@@ -172,16 +191,29 @@ public class Start extends AppCompatActivity {
 
     }
 
-    public void mixQuestion(){
+    public void mixQuestion() {
         Random random = new Random();
-        int listSize = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.size();
-        int randomIndex = random.nextInt(listSize);
+        if (Type.equals(ASKANWSER)) {
+            int listSize = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.size();
+            int randomIndex = random.nextInt(listSize);
 
-        for (int i = 0 ; i < listSize ; i++){
-            QuesAndAnswer quesAndAnswer = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(randomIndex);
-            GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.remove(quesAndAnswer);
-            GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.add(0, quesAndAnswer);
-            randomIndex = random.nextInt(listSize);
+            for (int i = 0; i < listSize; i++) {
+                QuesAndAnswer quesAndAnswer = GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(randomIndex);
+                GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.remove(quesAndAnswer);
+                GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.add(0, quesAndAnswer);
+                randomIndex = random.nextInt(listSize);
+            }
+        } else if (Type.equals(SENTENCE)) {
+            int listSize = GlobalData.listTopicSent.get(GlobalData.topicSentChoise).listWord.size();
+            int randomIndex = random.nextInt(listSize);
+
+            for (int i = 0; i < listSize; i++) {
+                String content = GlobalData.listTopicSent.get(GlobalData.topicSentChoise)
+                        .listWord.get(randomIndex);
+                GlobalData.listTopicSent.get(GlobalData.topicSentChoise).listWord.remove(content);
+                GlobalData.listTopicSent.get(GlobalData.topicSentChoise).listWord.add(0, content);
+                randomIndex = random.nextInt(listSize);
+            }
         }
     }
 
@@ -213,33 +245,44 @@ public class Start extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        microphoneHelper.closeInputStream();
+        finish();
+    }
 
 
     @SuppressLint("HandlerLeak")
-    Handler myHandler = new Handler()
-    {
+    Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0)
                 if (progress < 100) {
-                    if (progress % (int)(100/GlobalData.getTime()) == 0)
-                    {
+                    if (progress % (int) (100 / GlobalData.getTime()) == 0) {
                         textTime.setText(String.valueOf(timeCountdown));
                         timeCountdown--;
                     }
                     progress++;
                     progressBar.setProgress(progress);
                     super.handleMessage(msg);
-                }
-                else if (progress == 100){
+                } else if (progress == 100) {
                     calculateResult();
 
                     final Handler handler = new Handler();
                     handler.postDelayed(() -> {
-                        if (quesNumber.get() == GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.size()){
-                            Toast.makeText(Start.this,"The test is over",Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                        if (Type.equals(ASKANWSER)) {
+                            if (quesNumber.get() == GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.size()) {
+                                Toast.makeText(Start.this, "The test is over", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } else if (Type.equals(SENTENCE)) {
+                            if (quesNumber.get() == GlobalData.listTopicSent
+                                    .get(GlobalData.topicSentChoise).listWord.size()){
+                                Toast.makeText(Start.this,"The test is over",Toast.LENGTH_SHORT).show();
+                                return;
+                            }                        }
+
                         ratingBar.setNumStars(0);
                         ratingBar.setRating(0);
                         progress = 0;
@@ -247,7 +290,14 @@ public class Start extends AppCompatActivity {
                             microphoneHelper.closeInputStream();
                         timeCountdown = GlobalData.getTime();
                         record();
-                        txtQues.setText(GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.getAndIncrement()).Quesion);
+                        if (Type.equals(ASKANWSER)) {
+                            txtQues.setText(GlobalData.listTopic.get(GlobalData.topicChoise).quesAndAnswerList.get(quesNumber.getAndIncrement()).Quesion);
+                        } else if (Type.equals(SENTENCE)) {
+                            txtQues.setText(GlobalData.listTopicSent
+                                    .get(GlobalData.topicSentChoise).listWord
+                                    .get(quesNumber.getAndIncrement()));
+
+                        }
                         txtAnswer.setText("");
                     }, 3000);
 
@@ -261,7 +311,7 @@ public class Start extends AppCompatActivity {
     private class MicrophoneRecognizeDelegate implements RecognizeCallback {
         @Override
         public void onTranscription(SpeechResults speechResults) {
-            if(speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
+            if (speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
                 String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
 
                 if (!text.equals("%hesitation") && !text.equals("%HESITATION")) {
@@ -271,18 +321,21 @@ public class Start extends AppCompatActivity {
             }
         }
 
-        @Override public void onConnected() {
+        @Override
+        public void onConnected() {
             runOnUiThread(() -> {
-                Toast.makeText(Start.this,"Listening", Toast.LENGTH_LONG).show();
+                Toast.makeText(Start.this, "Listening", Toast.LENGTH_LONG).show();
                 startCountDown();
             });
         }
 
-        @Override public void onError(Exception e) {
+        @Override
+        public void onError(Exception e) {
             showError(e);
         }
 
-        @Override public void onDisconnected() {
+        @Override
+        public void onDisconnected() {
 
         }
 

@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.phungle.finalproject.model.QuesAndAnswer;
 import com.example.phungle.finalproject.model.Topic;
+import com.example.phungle.finalproject.model.TopicSent;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -39,19 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         log.info("Start using app");
-        btn_sentence.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Sentence.class);
-                startActivity(intent);
-            }
+        btn_sentence.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, Sentence.class);
+            startActivity(intent);
         });
-        btn_ask_anwser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AskAnwser.class);
-                startActivity(intent);
-            }
+        btn_ask_anwser.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AskAnwser.class);
+            startActivity(intent);
         });
     }
 
@@ -67,5 +62,17 @@ public class MainActivity extends AppCompatActivity {
         list2.add(new QuesAndAnswer("How old are you ?","I 15 year old"));
         list2.add(new QuesAndAnswer("Would you like some tea ?","Yes I do"));
         GlobalData.listTopic.add(new Topic("Topic 2",list2));
+
+        List<String> list3= new ArrayList<>();
+        list3.add("Hello");
+        list3.add("Happy");
+        list3.add("Bad");
+        GlobalData.listTopicSent.add(new TopicSent("Topic 1",list3));
+
+        List<String> list4 = new ArrayList<>();
+        list4.add("Home");
+        list4.add("Sad");
+        list4.add("Fun");
+        GlobalData.listTopicSent.add(new TopicSent("Topic 2",list4));
     }
 }

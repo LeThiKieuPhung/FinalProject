@@ -19,11 +19,11 @@
         android:textColor="@color/colorBlue"
         android:text="Sentence View" />
 
-    <ListView
-        android:id="@+id/list_sentence"
+    <ExpandableListView
+        android:id="@+id/expand_list_view_sentence"
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         />
 
     <Button

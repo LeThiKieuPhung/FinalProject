@@ -11,16 +11,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Theme"
+        android:text="Topic Sentence"
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
         />
 
     <EditText
-        android:id="@+id/edit_theme"
+        android:id="@+id/edit_topic_sent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New"/>
+        android:hint="Enter Name Topic"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,15 +52,6 @@
             android:background="@drawable/button"
             android:textColor="@color/colorBlue"
             android:text="Add"/>
-
-        <Button
-            android:id="@+id/btn_finish_add_to_sentence_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/button"
-            android:textColor="@color/colorBlue"
-            android:text="Finish"/>
 
     </LinearLayout>
 

@@ -3,7 +3,7 @@
 
 
     <!--Watson Speech-To-Text Service Credentials--> 
-    <string name="STT_username">1c715592-82e8-451d-bdf4-4ff6d7f7a051</string> 
-    <string name="STT_password">PtlZGd6AfYV3</string>  
+    <string name="STT_username">d6472209-3f48-4bff-80fc-c5aece964bdd</string> 
+    <string name="STT_password">E8kebB2GNtC3</string>  
 
 </resources>
