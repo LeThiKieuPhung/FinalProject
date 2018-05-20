@@ -38,8 +38,10 @@
         <activity android:name=".AddAskAnwser"
             android:parentActivityName=".ViewAskAnwser"/>
 
-        <activity android:name=".ViewSentence"/>
-        <activity android:name=".ViewAskAnwser"/>
+        <activity android:name=".ViewSentence"
+            android:parentActivityName=".Sentence"/>
+        <activity android:name=".ViewAskAnwser"
+            android:parentActivityName=".AskAnwser"/>
     </application>
 
 </manifest>

@@ -30,16 +30,13 @@ public class ViewAskAnwser extends AppCompatActivity {
             Intent intent = new Intent(ViewAskAnwser.this, AddAskAnwser.class);
             startActivity(intent);
         });
-        expand_list_view_ask_answer.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
-                if (i != GlobalData.topicChoise) {
-                    Toast.makeText(ViewAskAnwser.this, "You choose " +
-                            GlobalData.listTopic.get(i).name + "to use", Toast.LENGTH_SHORT).show();
-                    GlobalData.topicChoise = i;
-                }
-                return false;
+        expand_list_view_ask_answer.setOnGroupClickListener((expandableListView, view, i, l) -> {
+            if (i != GlobalData.topicChoise) {
+                Toast.makeText(ViewAskAnwser.this, "You choose " +
+                        GlobalData.listTopic.get(i).name + "to use", Toast.LENGTH_SHORT).show();
+                GlobalData.topicChoise = i;
             }
+            return false;
         });
     }
 }
